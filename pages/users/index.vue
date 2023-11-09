@@ -3,6 +3,15 @@
     <el-button @click="onAddUser" type="primary" >添加用户</el-button>
   </div>
   <el-table :data="data" style="width: 100%">
+    <el-table-column label="头像" width="180" >
+      <template #default="{row}">
+        <el-avatar :size="60" :src="row.avatar">
+          <img
+            src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
+          />
+        </el-avatar>
+      </template>
+    </el-table-column>
     <el-table-column prop="name" label="姓名" width="180" />
     <el-table-column prop="gender" label="性别" width="180" />
     <el-table-column prop="age" label="年龄" />

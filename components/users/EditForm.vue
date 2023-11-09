@@ -10,6 +10,14 @@
         <el-radio :label="0" size="large">保密</el-radio>
       </el-radio-group>
     </el-form-item>
+    <el-form-item label="头像">
+      <el-avatar :size="60" :src="user.avatar">
+        <img
+          src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
+        />
+      </el-avatar>
+      <input type="file" @change="onAvatarChange" accept="image/*"/>
+    </el-form-item>
     <el-form-item label="年龄">
       <el-input v-model.number="user.age" />
     </el-form-item>
@@ -33,6 +41,25 @@ const {user} = defineProps({
 
 function back() {
   history.back()
+}
+
+async function onAvatarChange(e) {
+  const file = e.target.files[0]
+  if(!file) {
+    return
+  }
+  const form = new FormData()
+  form.append('file', file)
+  try {
+    const src = await $fetch('/api/upload', {
+      method: 'POST',
+      body: form
+    })
+    user.avatar = src
+    ElMessage.success('上传成功！')
+  } catch(ex) {
+    console.error(ex)
+  }
 }
 
 async function onSubmit() {

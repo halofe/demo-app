@@ -6,6 +6,7 @@ const defaultFields = {
   name: true,
   gender: true,
   age: true,
+  avatar: true,
 }
 
 export function list() {

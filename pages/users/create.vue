@@ -8,6 +8,7 @@ import {reactive} from 'vue'
 const user = reactive({
   name: '',
   age: '',
+  avatar: '',
   gender: '',
 })
 </script>
