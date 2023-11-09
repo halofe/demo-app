@@ -1,3 +1,12 @@
+<template>
+  新建用户
+  <UsersEditUserForm :user="user"/>
+</template>
+
 <script setup>
-await navigateTo('/users/edit/0')
+const user = {
+  name: '',
+  age: '',
+  gender: '',
+}
 </script>

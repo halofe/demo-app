@@ -1,14 +1,22 @@
 
 import prisma from "./prisma";
 
-
-export function list() {
-  return prisma.user.findMany()
+const defaultFields = {
+  id: true,
+  name: true,
+  gender: true,
+  age: true,
 }
 
-export function get1(id) {
-  console.log(222, {id})
+export function list() {
+  return prisma.user.findMany({
+    select: defaultFields
+  })
+}
+
+export function get(id) {
   return prisma.user.findUnique({
+    select: defaultFields,
     where: { id }
   })
 }
