@@ -1,5 +1,5 @@
 
-import prisma from "./prisma";
+import prisma from "@/server/services/prisma";
 
 const defaultFields = {
   id: true,
@@ -37,8 +37,8 @@ export function create(data) {
   })
 }
 
-export function del(data) {
+export function del(id) {
   return prisma.user.delete({
-    where: data,
+    where: {id},
   })
 }

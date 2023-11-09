@@ -30,7 +30,6 @@
   </el-form>
 </template>
 <script setup>
-import {create, update} from '@/server/services/user.js'
 
 const {user} = defineProps({
   user: {
@@ -75,4 +74,3 @@ async function onSubmit() {
   }
 }
 </script>
-~/server/services/user.js

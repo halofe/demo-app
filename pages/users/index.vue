@@ -25,7 +25,6 @@
 </template>
 
 <script setup>
-import {list as getUsers} from '@/server/services/user.js'
 const { data, error} = await useFetch('/api/user/list')
 
 function onAddUser() {

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   console.log(body, 22)
   const {slices, type} = body
-  const projDir = import.meta.url.replace(/^file:\/\/|.nuxt\/.*$/g, '')
+  const projDir = import.meta.url.replace(/^file:\/\/|(?:.nuxt|.output)\/.*$/g, '')
   const bufs = await Promise.all(slices.map(x => readFile(`${projDir}/public/partials/${x}`)))
   const bufConcated = Buffer.concat(bufs)
 

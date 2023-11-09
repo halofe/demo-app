@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
   }
   const tmpPath = file[0].filepath
   const fileName = await createHashFromFile(tmpPath)
-  const projDir = import.meta.url.replace(/^file:\/\/|.nuxt\/.*$/g, '')
+  const projDir = import.meta.url.replace(/^file:\/\/|(?:.nuxt|.output)\/.*$/g, '')
   let fileUrl
   if(!sliced) {
     const fileExt = file[0].mimetype.split('/')[1]

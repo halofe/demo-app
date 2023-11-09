@@ -10,9 +10,6 @@ definePageMeta({
   }
 })
 const route = useRoute()
-import {get as getUser} from '@/server/services/user.js'
 const userId = route.params.id
-const { data: user, error} = await useAsyncData('user' + userId, () => {
-  return getUser(Number(userId))
-})
-</script>~/server/services/user.js
+const { data: user, error} = await useFetch('/api/user/get?id=' + userId)
+</script>
