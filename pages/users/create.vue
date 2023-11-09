@@ -1,12 +1,13 @@
 <template>
   新建用户
-  <UsersEditUserForm :user="user"/>
+  <UsersEditForm :user="user"/>
 </template>
 
 <script setup>
-const user = {
+import {reactive} from 'vue'
+const user = reactive({
   name: '',
   age: '',
   gender: '',
-}
+})
 </script>

@@ -23,6 +23,7 @@ export function get(id) {
 
 export function update(data) {
   const {id, ...updates} = data
+  console.log(id, updates, 222)
   return prisma.user.update({
     where: { id },
     data: updates,
@@ -30,7 +31,7 @@ export function update(data) {
 }
 
 export function create(data) {
-  return prisma.user.update({
+  return prisma.user.create({
     data,
   })
 }

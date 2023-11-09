@@ -1,6 +1,6 @@
 <template>
   {{ userId ? '编辑用户' : '新建用户' }}
-  <UsersEditUserForm :user="user"/>
+  <UsersEditForm :user="user"/>
 </template>
 
 <script setup>
@@ -10,9 +10,9 @@ definePageMeta({
   }
 })
 const route = useRoute()
-import {get as getUser} from '@/server/services/users.js'
+import {get as getUser} from '@/server/services/user.js'
 const userId = route.params.id
 const { data: user, error} = await useAsyncData('user' + userId, () => {
   return getUser(Number(userId))
 })
-</script>
+</script>~/server/services/user.js
