@@ -57,7 +57,8 @@ async function onAvatarChange(e) {
     user.avatar = src
     ElMessage.success('上传成功！')
   } catch(ex) {
-    console.error(ex)
+    ElMessage.error(ex.data.message)
+    console.error(ex.data)
   }
 }
 
@@ -70,7 +71,8 @@ async function onSubmit() {
     ElMessage.success(user.id ? '保存成功！' : '创建成功！')
     history.back()
   } catch(ex) {
-    console.error(ex, ex.data)
+    ElMessage.error(ex.data.message)
+    console.error(ex.data)
   }
 }
 </script>

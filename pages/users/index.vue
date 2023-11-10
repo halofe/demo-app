@@ -43,7 +43,8 @@ async function onDeleteUser(id, $index) {
     data.value.splice($index, 1)
     ElMessage.success('删除成功！')
   } catch(ex) {
-    console.error(ex)
+    ElMessage.error(ex.data.message)
+    console.error(ex.data)
   }
 }
 </script>
