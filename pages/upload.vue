@@ -15,8 +15,14 @@ async function onAvatarChange(e) {
   if(!file) {
     return
   }
-  const url = await uploadFile(file)
-  avatar.value = url
+  try {
+    const url = await uploadFile(file)
+    avatar.value = url
+  } catch(ex) {
+    const data = ex.data
+    console.error(data || ex)
+    ElMessage.error(data ? data.message : '上传出错')
+  }
 }
 async function uploadFile(file) {
   console.log(file)

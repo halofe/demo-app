@@ -1,8 +1,9 @@
 
 import {rename} from 'node:fs/promises'
 import formidable from 'formidable'
-import { createHashFromFile } from '@/utils/createHash';
-import {join} from 'path'
+import { createHashFromFile } from '@/server/utils/createHash';
+import {join} from 'node:path'
+import url from 'node:url'
 
 export default defineEventHandler(async (event) => {
   const headers = getRequestHeaders(event);
@@ -18,7 +19,7 @@ export default defineEventHandler(async (event) => {
   }
   const tmpPath = file[0].filepath
   const fileName = await createHashFromFile(tmpPath)
-  const projDir = import.meta.url.replace(/^file:\/\/|(?:.nuxt|.output)\/.*$/g, '')
+  const projDir = url.fileURLToPath(import.meta.url.replace(/(?:.nuxt|.output)\/.*$/g, ''))
   let fileUrl
   if(!sliced) {
     const fileExt = file[0].mimetype.split('/')[1]

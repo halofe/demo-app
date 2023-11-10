@@ -1,5 +1,5 @@
-import { createHash } from "crypto";
-import { readFile } from "fs/promises"; 
+import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 
 
 export default function createHashFromString(content) {
