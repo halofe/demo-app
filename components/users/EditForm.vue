@@ -70,7 +70,7 @@ async function onSubmit() {
     ElMessage.success(user.id ? '保存成功！' : '创建成功！')
     history.back()
   } catch(ex) {
-    console.error(ex)
+    console.error(ex, ex.data)
   }
 }
 </script>

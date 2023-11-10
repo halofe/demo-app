@@ -1,7 +1,7 @@
 
 import {rename} from 'node:fs/promises'
 import formidable from 'formidable'
-import { createHashFromFile } from '~/prisma/utils/createHash';
+import { createHashFromFile } from '@/utils/createHash';
 import {join} from 'path'
 
 export default defineEventHandler(async (event) => {

@@ -1,6 +1,6 @@
 
 import { readFile, writeFile } from "fs/promises"
-import createHashFromString from "~/prisma/utils/createHash"
+import createHashFromString from "@/utils/createHash"
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
