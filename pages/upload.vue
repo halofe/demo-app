@@ -1,4 +1,5 @@
 <template>
+  <div>已实现断点续传，及上传过的文件秒传</div>
   <el-avatar :size="60" :src="avatar">
     <img
       src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
@@ -8,6 +9,7 @@
 </template>
 <script setup>
 import {ref} from 'vue'
+import SparkMD5 from 'spark-md5'
 const avatar = ref('')
 
 async function onAvatarChange(e) {
@@ -24,19 +26,49 @@ async function onAvatarChange(e) {
     ElMessage.error(data ? data.message : '上传出错')
   }
 }
+
+// 大文件避免卡顿 WebWorker https://blog.csdn.net/weixin_43989307/article/details/124863516
+// https://github.com/satazor/js-spark-md5#hash-a-file-incrementally
+async function hashBlob(blob) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      const hash = SparkMD5.ArrayBuffer.hash(reader.result)
+      resolve(hash);
+    };
+    reader.readAsArrayBuffer(blob);
+  })
+}
+async function uploadPrepare(file, chunks) {
+  await Promise.all(chunks.map(async x => {
+    const hash = await hashBlob(file.slice(x.start, x.end))
+    x.hash = hash
+    return x
+  }))
+  // 检查每个片段是已存在
+  const chunkStatus = await $fetch('/api/uploadPrepare', {
+    method: 'POST',
+    body: JSON.stringify({chunks})
+  })
+  return chunkStatus
+}
+
 async function uploadFile(file) {
-  console.log(file)
-  const perFileSize = 1 * 1024 * 1024
-  const arr = []
-  for(let i = 0, end = 0; end < file.size; i++) {
-    const start = i * perFileSize
-    end = (i + 1) * perFileSize
-    arr.push([start, end])
+  const chunkSize = 1 * 1024 * 1024
+  const fileSize = file.size
+  const chunks = []
+  for(let i = 0, chunksCount = Math.ceil(fileSize/chunkSize); i < chunksCount; i++) {
+    const start = i * chunkSize
+    const end = i === chunksCount - 1 ? fileSize : start + chunkSize
+    chunks.push({start, end})
   }
-  console.log('slices', arr)
-  const slices = await Promise.all(arr.map(x => {
+  const chunkStatus = await uploadPrepare(file, chunks)
+  const slices = await Promise.all(chunks.map(x => {
+    if(chunkStatus[x.hash]) { // prepare 返回已存在
+      return x.hash
+    }
     const form = new FormData()
-    form.append('file', file.slice(x[0], x[1]))
+    form.append('file', file.slice(x.start, x.end))
     form.append('sliced', 1)
     return $fetch('/api/upload', {
       method: 'POST',

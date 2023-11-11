@@ -29,7 +29,6 @@ export default defineEventHandler(async (event) => {
   }
   const targetPath = join(projDir, 'public', fileUrl)
   await rename(tmpPath, targetPath)
-  console.log({sliced, fileName})
   return sliced ? fileName : fileUrl
 })
 
