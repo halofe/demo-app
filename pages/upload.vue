@@ -18,7 +18,7 @@ async function onAvatarChange(e) {
     return
   }
   try {
-    const url = await uploadFile(file)
+    const url = await uploadBigFile(file)
     avatar.value = url
   } catch(ex) {
     const data = ex.data
@@ -53,9 +53,26 @@ async function uploadPrepare(file, chunks) {
   return chunkStatus
 }
 
-async function uploadFile(file) {
+function uploadFile(file, start = false, end) {
+  const form = new FormData()
+  if(start === false) {
+    form.append('file', file)
+  } else {
+    form.append('file', file.slice(x.start, x.end))
+    form.append('sliced', 1)
+  }
+  return $fetch('/api/upload', {
+    method: 'POST',
+    body: form,
+  })
+}
+
+async function uploadBigFile(file) {
   const chunkSize = 1 * 1024 * 1024
   const fileSize = file.size
+  if(fileSize <= chunkSize) {
+    return uploadFile(file)
+  }
   const chunks = []
   for(let i = 0, chunksCount = Math.ceil(fileSize/chunkSize); i < chunksCount; i++) {
     const start = i * chunkSize
@@ -67,13 +84,7 @@ async function uploadFile(file) {
     if(chunkStatus[x.hash]) { // prepare 返回已存在
       return x.hash
     }
-    const form = new FormData()
-    form.append('file', file.slice(x.start, x.end))
-    form.append('sliced', 1)
-    return $fetch('/api/upload', {
-      method: 'POST',
-      body: form,
-    })
+    return uploadFile(file, x.start, x.end)
   }))
   const url = await $fetch('/api/uploadMerge', {
     method: 'POST',
